@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <form action="{% url 'editarLibro' libro.pk %}" method='POST'>
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="titulo" class='form-label'>Titulo</label>
+                <input id="titulo"
+                type="text"
+                name="titulo"
+                class="form-control"
+                value="{{ libro.titulo }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripcion</label>
+                <!-- 1. Corregido: el textarea se cierra correctamente y el valor va dentro -->
+                <textarea class="form-control" 
+                name="descripcion" 
+                id="descripcion">{{ libro.descripcion }}</textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="autor" class='form-label'>Autor</label>
+                <select name="autor"
+                id="autor" 
+                class="form-control">
+                {% for autor in autores %}
+                    <option value="{{ autor.id }}"
+                    {% if autor.id == libro.autor.id %}
+                    selected
+                    {% endif %}
+                    >{{ autor.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <input type="submit" class="btn btn-warning" value="Actualizar"/>
+
+        </form>    
+        
+        <div class="container mb-2 mt-3">
+            <form action="{% url 'eliminarLibro' libro.pk %}" method='POST'>
+                {% csrf_token %}
+                <input type="submit" class="btn btn-danger" value="Eliminar"/>
+            </form>    
+        </div>
+
+    </div>
+
+{% endblock %}
